@@ -36,28 +36,42 @@ buttonImg.src = 'img/icn-search.svg';
 buttonImg.alt = 'Search icon';
 button.appendChild(buttonImg);
 
-const searchInput = input.value;
+const foundNames = [];
 
 /*NEED TO FIGURE OUT THIS SEARCH MATCHING THANG*/
 
 function searchName (search, names) {
-   for (let i = 0; i < names.length; i++){
-   if (search.length != 0 && names[i].textContent.toLowerCase().includes(search.toLowerCase())){
-      showPage(names, 1);
-        }
-   }
+   const searchValue = search.value.toLowerCase();
+   for (let i = 0; i < names.length; i++) {
+      const firstName = names[i].name.first.toLowerCase();
+      const lastName = names[i].name.last.toLowerCase();
+      // console.log(firstName + ' ' + lastName);
+      if (firstName.includes(searchValue) || lastName.includes(searchValue)) {
+         const includedNames = names[i];
+         // console.log(names[i]);
+         console.log(includedNames);
+         // showPage(foundNames, 1);
+         // console.log(foundNames);
+      //    console.log(searchValue);
+         // foundNames.push(names[i]);
+         
+      
+      } 
+   } 
 }
 
+
 button.addEventListener ('click', () => {
-   searchName (searchInput, data);
+   searchName (input, data);
    console.log('Submit works!');
 });
 
-label.addEventListener ('keyup', () => {
-   searchName (searchInput, data);
-   console.log('Typing works!');
-   console.log(search);
-});
+/*ISSUE IS THE FUNCTION RUNS AFTER EVERY KEY UP CREATING AN ARRAY FOR EVERY LETTER INPUT*/
+
+// input.addEventListener ('keyup', () => {
+//    searchName (input, data);
+//    console.log('Typing works!');
+// });
 // const search = document.createElement('input');
 // search.type = 'text';
 // search.value = '';
@@ -171,7 +185,6 @@ function addPagination(list) {
         removePrevBtn.className = '';
         const activeBtn = e.target;
         activeBtn.className = 'active';
-
         /*shows page according to active page # button clicked */
         showPage(list, activeBtn.textContent)
       }

@@ -137,6 +137,10 @@ function searchName (search, names) {
    } 
 }
 
+button.addEventListener ('click', () => {
+   searchName(search, data);
+});
+
 search.addEventListener ('keyup', () => {
    searchName (search, data);
 });

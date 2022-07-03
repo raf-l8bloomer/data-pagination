@@ -9,14 +9,16 @@ For assistance:
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
 
+
+/*Dynamically adding search form into HTML */
+
 const header = document.querySelector('.header');
 
-/* NEED createElement function TO CLEAN CODE*/
-
-const label = document.createElement('label');
+const label = document.createElement('label', 'className','student-search');
 label.for = 'search';
 label.className = 'student-search';
 header.appendChild(label);
+
 
 const span = document.createElement('span');
 span.textContent = 'Search by name';
@@ -37,63 +39,28 @@ buttonImg.alt = 'Search icon';
 button.appendChild(buttonImg);
 
 
-
-/*NEED TO FIGURE OUT THIS SEARCH MATCHING THANG*/
-
-function searchName (search, names) {
-   const foundNames = [];
-   const searchValue = search.value.toLowerCase();
-   for (let i = 0; i < names.length; i++) {
-      const firstName = names[i].name.first.toLowerCase();
-      const lastName = names[i].name.last.toLowerCase();
-      // console.log(firstName + ' ' + lastName);
-      if (searchValue.length != 0 && firstName.includes(searchValue) || lastName.includes(searchValue)) {
-          console.log(names[i]);
-         foundNames.push(names[i]);
-         showPage(foundNames,1);
-      } 
-   } 
-}
-
-
-button.addEventListener ('click', () => {
-   searchName (search, data);
-   console.log('Submit works!');
-});
-
-search.addEventListener ('keyup', () => {
-   searchName (search, data);
-   console.log('Typing works!');
-});
-
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
-
-
-/* showPage pulls all elements in list parameter and sets how many elements to present per 1 page */
+/* showPage pulls all elements in 'list' parameter and presents 9 students per 1 page */
 
 function showPage(list, page) {
-   const startIndex = (page * 9 ) - 9;
-   const endIndex = page*9;
-
+   const itemsPerPage = 9
+   const startIndex = (page * itemsPerPage ) - itemsPerPage;
+   const endIndex = page*itemsPerPage;
    const studentList = document.querySelector('ul'); 
    studentList.innerHTML = ''; // removes existing students displayed previously
 
    /*loops over list parameter displaying 9 students( index:0-9 ) within if statement */
    for (let i = 0; i < list.length; i++ ) {
+      const students = list[i];
      if (i >= startIndex && i < endIndex) {
-        const studentItem = `
+        let studentItem = `
          <li class="student-item cf">
          <div class="student-details">
-            <img class="avatar" src="${data[i].picture.large}" alt="Profile Picture">
-            <h3>${data[i].name.first} ${data[i].name.last}</h3>
-            <span class="email">${data[i].email}</span>
+            <img class="avatar" src="${students.picture.large}" alt="Profile Picture">
+            <h3>${students.name.first} ${students.name.last}</h3>
+            <span class="email">${students.email}</span>
          </div>
          <div class="joined-details">
-            <span class="date">${data[i].registered.date}</span>
+            <span class="date">${students.registered.date}</span>
          </div>
          </li>
         `;
@@ -105,14 +72,7 @@ function showPage(list, page) {
    }
  }
 
-
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
-
-
-/* addPagination creates # of pages needed to present  9 students( index:0-9 ) per page */
+/* addPagination creates # of pages needed to present 9 students per page max*/
 function addPagination(list) {
    const numOfPages = Math.ceil(list.length/9); // 
    const linkList = document.querySelector('.link-list')
@@ -121,16 +81,16 @@ function addPagination(list) {
    for (let i = 1; i <= numOfPages; i++) {
      const button = `
       <li>
-      <button type="button">${[i]}</button>
+      <button type="button">${i}</button>
       </li>
       `
      /* insert the buttons to the link-list within pagination div*/
-     linkList.insertAdjacentHTML("beforeend", button)
+     linkList.insertAdjacentHTML("beforeend", button);
+      /*first button is always active*/
+      const firstButton = document.querySelector('li button');
+      firstButton.className ='active';
    }
-   /*first button is always active*/
-   const firstButton = document.querySelector('button');
-   firstButton.className ='active';
- 
+  
    /* when buttons are clicked, removes current active class and adds to clicked button */
    linkList.addEventListener ('click', (e) => {
       if (e.target.tagName === 'BUTTON') {
@@ -148,3 +108,24 @@ function addPagination(list) {
 
 showPage(data,1);
 addPagination(data);
+
+
+/* searchName creates new array of data and filters for students with matching inputted letters with their names*/
+
+function searchName (search, names) {
+   let foundNames = [];
+   const searchValue = search.value.toLowerCase();
+   for (let i = 0; i < names.length; i++) {
+      const firstName = names[i].name.first.toLowerCase();
+      const lastName = names[i].name.last.toLowerCase();
+      if (searchValue.length != 0 && firstName.includes(searchValue) || lastName.includes(searchValue)) {
+         foundNames.push(names[i]);
+         showPage(foundNames,1);
+         addPagination(foundNames);
+      } 
+   } 
+}
+
+search.addEventListener ('keyup', () => {
+   searchName (search, data);
+});

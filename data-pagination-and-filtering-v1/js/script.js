@@ -19,7 +19,6 @@ label.for = 'search';
 label.className = 'student-search';
 header.appendChild(label);
 
-
 const span = document.createElement('span');
 span.textContent = 'Search by name';
 label.appendChild(span);
@@ -38,6 +37,10 @@ buttonImg.src = 'img/icn-search.svg';
 buttonImg.alt = 'Search icon';
 button.appendChild(buttonImg);
 
+/*Globally setting to variable for more functions to access*/
+const studentList = document.querySelector('ul'); 
+const linkList = document.querySelector('.link-list');
+
 
 /* showPage pulls all elements in 'list' parameter and presents 9 students per 1 page */
 
@@ -45,7 +48,6 @@ function showPage(list, page) {
    const itemsPerPage = 9
    const startIndex = (page * itemsPerPage ) - itemsPerPage;
    const endIndex = page*itemsPerPage;
-   const studentList = document.querySelector('ul'); 
    studentList.innerHTML = ''; // removes existing students displayed previously
 
    /*loops over list parameter displaying 9 students( index:0-9 ) within if statement */
@@ -75,7 +77,6 @@ function showPage(list, page) {
 /* addPagination creates # of pages needed to present 9 students per page max*/
 function addPagination(list) {
    const numOfPages = Math.ceil(list.length/9); // 
-   const linkList = document.querySelector('.link-list')
    linkList.innerHTML = "" // removes existing pages displayed previously
    /*loops over number of pages needed and creates and numbers buttons needed */
    for (let i = 1; i <= numOfPages; i++) {
@@ -110,7 +111,9 @@ showPage(data,1);
 addPagination(data);
 
 
-/* searchName creates new array of data and filters for students with matching inputted letters with their names*/
+/* searchName creates new array of data and filters for students with matching inputted letters with their names
+** if no name found, list is cleared and no results appear
+*/
 
 function searchName (search, names) {
    let foundNames = [];
@@ -118,11 +121,19 @@ function searchName (search, names) {
    for (let i = 0; i < names.length; i++) {
       const firstName = names[i].name.first.toLowerCase();
       const lastName = names[i].name.last.toLowerCase();
-      if (searchValue.length != 0 && firstName.includes(searchValue) || lastName.includes(searchValue)) {
+      if (searchValue.length !== 0 && firstName.includes(searchValue) || lastName.includes(searchValue)) {
          foundNames.push(names[i]);
          showPage(foundNames,1);
          addPagination(foundNames);
-      } 
+      } else if (foundNames.length === 0){
+      studentList.innerHTML = "";
+      linkList.innerHTML = " "; // removes existing pages displayed previously
+      const noResults = document.createElement('h1');
+      noResults.className = "no-results";
+      noResults.textContent = "No Results"
+      studentList.appendChild(noResults);
+
+      }
    } 
 }
 

@@ -22,10 +22,10 @@ const span = document.createElement('span');
 span.textContent = 'Search by name';
 label.appendChild(span);
 
-const input = document.createElement('input');
-input.id = 'search';
-input.placeholder = 'Search by name...';
-label.appendChild(input);
+const search = document.createElement('input');
+search.id = 'search';
+search.placeholder = 'Search by name...';
+label.appendChild(search);
 
 const button = document.createElement('button');
 button.type = 'button';
@@ -36,83 +36,36 @@ buttonImg.src = 'img/icn-search.svg';
 buttonImg.alt = 'Search icon';
 button.appendChild(buttonImg);
 
-const foundNames = [];
+
 
 /*NEED TO FIGURE OUT THIS SEARCH MATCHING THANG*/
 
 function searchName (search, names) {
+   const foundNames = [];
    const searchValue = search.value.toLowerCase();
    for (let i = 0; i < names.length; i++) {
       const firstName = names[i].name.first.toLowerCase();
       const lastName = names[i].name.last.toLowerCase();
       // console.log(firstName + ' ' + lastName);
-      if (firstName.includes(searchValue) || lastName.includes(searchValue)) {
-         const includedNames = names[i];
-         // console.log(names[i]);
-         console.log(includedNames);
-         // showPage(foundNames, 1);
-         // console.log(foundNames);
-      //    console.log(searchValue);
-         // foundNames.push(names[i]);
-         
-      
+      if (searchValue.length != 0 && firstName.includes(searchValue) || lastName.includes(searchValue)) {
+          console.log(names[i]);
+         foundNames.push(names[i]);
+         showPage(foundNames,1);
       } 
    } 
 }
 
 
 button.addEventListener ('click', () => {
-   searchName (input, data);
+   searchName (search, data);
    console.log('Submit works!');
 });
 
-/*ISSUE IS THE FUNCTION RUNS AFTER EVERY KEY UP CREATING AN ARRAY FOR EVERY LETTER INPUT*/
+search.addEventListener ('keyup', () => {
+   searchName (search, data);
+   console.log('Typing works!');
+});
 
-// input.addEventListener ('keyup', () => {
-//    searchName (input, data);
-//    console.log('Typing works!');
-// });
-// const search = document.createElement('input');
-// search.type = 'text';
-// search.value = '';
-// search.className = 'student-search';
-// search.placeholder='Search student';
-// search.id = "search-input";
-// form.appendChild(search);
-
-// const submit = document.createElement('input');
-// submit.type = 'submit';
-// submit.className = 'student-search'
-// submit.textContent = 'Submit';
-// form.appendChild(submit);
-
-{/* <label for="search" class="student-search">
-  <span>Search by name</span>
-  <input id="search" placeholder="Search by name...">
-  <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
-</label> */}
-
-
-
-
-// let searchInput = search.value;
-
-// // let i = 0;
-
-// // const studentNames = `${data[i].name.first}`;
-
-
-
-
-//    }
-
-// }
-
-
-
-
-
-// access name like data[i].name.first
 
 /*
 Create the `showPage` function
